@@ -1,7 +1,3 @@
-# MQTT Client demo
-# Continuously monitor two different MQTT topics for data,
-# check if the received data matches two predefined 'commands'
-
 import paho.mqtt.client as mqtt
 from picamera import PiCamera
 from time import sleep
@@ -36,7 +32,8 @@ def on_message(client, userdata, msg):
 		camera.start_preview()
 		#sleep(5)
 		date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S_%f")
-		camera.capture('/home/pi/Desktop/' + date + '.jpg')
+		#camera.capture('/home/pi/Desktop/' + date + '.jpg')
+		camera.capture('/home/pi/Desktop/cameraTrapPhotos/' + date + '.jpg')
 		#camera.capture('/home/pi/Desktop/test.jpg')
 		#camera.annotate_text_size = 50
 		#camera.annotate_text = date
