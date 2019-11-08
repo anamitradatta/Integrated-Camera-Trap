@@ -3,8 +3,9 @@ from picamera import PiCamera
 from time import sleep
 import socket
 import datetime
+from ftplib import FTP
 
-MQTT_SERVER = "192.168.0.100"
+MQTT_SERVER = "192.168.0.18"
 #MQTT_SERVER = "test.mosquitto.org"
 #MQTT_SERVER = "172.30.21.100"
 MQTT_PATH = "test"
@@ -25,7 +26,7 @@ def on_message(client, userdata, msg):
 
 #	if msg.payload == "Hello":
 	if msg.payload == "Motion Detected":
-		print("Received message", msg.payload)
+		print("Received message:" + msg.payload)
 		#print(datetime.datetime.now())
 		camera.resolution=(2592,1944)
 		#camera.framerate =15
@@ -33,12 +34,29 @@ def on_message(client, userdata, msg):
 		#sleep(5)
 		date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S_%f")
 		#camera.capture('/home/pi/Desktop/' + date + '.jpg')
-		camera.capture('/home/pi/Desktop/cameraTrapPhotos/' + date + '.jpg')
+		filename = date + '.jpg'
+		#camera.capture('/home/pi/Desktop/cameraTrapPhotos/' + date + '.jpg')
+		path = '/home/pi/Desktop/cameraTrapPhotos/'
+		camera.capture(path+filename);
+		#camera.capture('/home/pi/Desktop/cameraTrapPhotos/' + filename)
 		#camera.capture('/home/pi/Desktop/test.jpg')
 		#camera.annotate_text_size = 50
 		#camera.annotate_text = date
 		camera.stop_preview()
-		print(datetime.datetime.now())
+		#print(datetime.datetime.now())
+		ftp = FTP(MQTT_SERVER)
+		#print(ftp.getwelcome())
+		login_response = ftp.login('pi','camera')
+		#print(login_response)
+		ftp.cwd('Desktop/cameraTrapPhotos')
+		#print(path+filename)
+		try:
+			file = open(path+filename,'rb')
+		except OSError:
+			print('couldnt open file')
+		ftp.storbinary('STOR ' + path+filename, file)
+		file.close()
+		ftp.quit()
 # Create an MQTT client and attach our routines to it.
 client = mqtt.Client()
 client.on_connect = on_connect
