@@ -35,13 +35,16 @@ while True:
 
 	publish.single(MQTT_PATH, message, hostname=MQTT_SERVER)
 	print("Sent message: ", message)
-	camera.resolution=(2592,1944)
+	camera.resolution=(3280,2464)
 	#camera.framerate=15
 	camera.start_preview()
 	#sleep(5)
 	date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S_%f")
+	filename = date+ '_camera1.jpg'
 	#camera.capture('/home/pi/Desktop/' + date + '.jpg')
-	camera.capture('/home/pi/Desktop/cameraTrapPhotos/' + date + '.jpg')
+	path = '/home/pi/Desktop/cameraTrapPhotos/'
+	#camera.capture('/home/pi/Desktop/cameraTrapPhotos/' + date + "_camera1" + '.jpg')
+	camera.capture(path+filename)
 	#camera.capture('/home/pi/Desktop/test.jpg')
 	camera.stop_preview()
 	print(datetime.datetime.now())
