@@ -5,7 +5,7 @@ import socket
 import datetime
 from ftplib import FTP
 
-MQTT_SERVER = "192.168.0.18"
+MQTT_SERVER = "192.168.0.103"
 #MQTT_SERVER = "test.mosquitto.org"
 #MQTT_SERVER = "172.30.21.100"
 MQTT_PATH = "test"
@@ -28,16 +28,16 @@ def on_message(client, userdata, msg):
 	if msg.payload == "Motion Detected":
 		print("Received message:" + msg.payload)
 		#print(datetime.datetime.now())
-		camera.resolution=(2592,1944)
+		camera.resolution=(3280,2464)
 		#camera.framerate =15
 		camera.start_preview()
 		#sleep(5)
 		date = datetime.datetime.now().strftime("%m_%d_%Y_%H_%M_%S_%f")
 		#camera.capture('/home/pi/Desktop/' + date + '.jpg')
-		filename = date + '.jpg'
-		#camera.capture('/home/pi/Desktop/cameraTrapPhotos/' + date + '.jpg')
+		filename = date + '_camera2.jpg'
+		#camera.capture('/home/pi/Desktop/cameraTrapPhotos/' + date +  '_camera2.jpg')
 		path = '/home/pi/Desktop/cameraTrapPhotos/'
-		camera.capture(path+filename);
+		camera.capture(path+filename)
 		#camera.capture('/home/pi/Desktop/cameraTrapPhotos/' + filename)
 		#camera.capture('/home/pi/Desktop/test.jpg')
 		#camera.annotate_text_size = 50
@@ -65,7 +65,5 @@ client.on_message = on_message
 client.connect(MQTT_SERVER, 1883)
 
 # Process network traffic and dispatch callbacks. This will also handle
-# reconnecting. Check the documentation at
-# https://github.com/eclipse/paho.mqtt.python
-# for information on how to use other loop*() functions
+# reconnecting.
 client.loop_forever()
