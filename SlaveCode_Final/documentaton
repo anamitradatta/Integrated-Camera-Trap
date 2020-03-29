@@ -1,0 +1,23 @@
+enable ssh
+enable camera
+
+edit XKBLAYOUT line in /etc/default.keyboard to us
+edit /etc/wpa_supplicant/wpa_supplicant.conf to add 
+
+network={
+	ssid="CTWifi"
+	psk="cameratrap"
+}										
+
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get install mosquitto mosquitto-clients
+sudo apt-get install python-pip
+sudo pip install paho-mqtt
+sudo apt-get install ftpd
+sudo pip install gpiozero
+sudo pip install picamera
+sudo apt-get install fbi
+sudo apt-get install sshpass
+sudo pip install serial
+sudo pip install schedule
