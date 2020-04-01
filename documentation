@@ -78,7 +78,7 @@ the default, recommended password was "cameratrap"
 
 In the main source code folder, type in the command "sudo chmod 777 ./*" and "sudo chown pi ./*" to run all files as user pi without root permissions
 
-Make a directory called cameraTrapPhotos/ in the same directory as the source code.
+Make a directory called cameraTrapPhotos in the same directory as the source code.
 
 Make sure python or python3 is installed on your OS by typing in "python --version", if returns nothing, then you need to install python for Linux https://www.python.org/downloads/source/
 
