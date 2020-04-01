@@ -80,6 +80,6 @@ In the main source code folder, type in the command "sudo chmod 777 ./*" and "su
 
 Make a directory called cameraTrapPhotos in the same directory as the source code.
 
-Make sure python or python3 is installed on your OS by typing in "python --version", if returns nothing, then you need to install python for Linux https://www.python.org/downloads/source/
+Python should be pre-installed on Raspbian OS. Make sure python or python3 is installed on your OS by typing in "python --version", if returns nothing, then you need to install python for Linux https://www.python.org/downloads/source/
 
 Type "python <name of python file>" to run the code 
