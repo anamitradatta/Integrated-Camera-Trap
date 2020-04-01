@@ -21,8 +21,8 @@ Else, follow the Command Line
 if you need to edit the wpa_supplicant.conf file to connect a network, add this to the bottom
 ----------------------------------------------------------------
 network={
-	ssid=<name of Wifi Network>
-	psk=<Password for that Wifi Network>
+	ssid="<name of Wifi Network>"
+	psk="<Password for that Wifi Network>"
 }
 -----------------------------------------------------------------
 
