@@ -3,7 +3,7 @@ We recommend the version with Desktop
 
 To install the Raspbian OS on the microSD card, we recommend to use Etcher : https://www.balena.io/etcher/
 
-Install the camera on the Pi
+Install the camera and PIR sensor on the Pi
 
 The default username is "pi" and the default password is "raspberry"
 
