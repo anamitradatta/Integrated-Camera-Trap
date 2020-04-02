@@ -33,6 +33,57 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
 
                 MESSAGE = data.decode().strip();
                 
+                #Test Sending Picture
+                if "picture" == MESSAGE:
+                    print("Sending Picture...")
+                    conn.sendall(b'NOTIFICATION: Sending Picture...\n')
+                    ftp = FTP()
+                    ftp.connect(CLIENT,CLIENT_PORT) #connect to FTP server on phone
+                    ftp.login('android','android') #username and password for FTP Client, change if needed
+                    ftp.cwd('Download')
+                    file = open('/home/pi/test_photo.jpg','rb')
+                    ftp.storbinary('STOR ' + '/Download/test_photo.jpg', file)
+                    file.close()
+                    ftp.quit()
+                    print ("Picture Sent to Phone")
+                    conn.sendall(b'NOTIFICATION: Picture Sent to Phone\n')
+
+                elif "powerCheck" == MESSAGE:
+                    conn.sendall(b'NOTIFICATION: Power Checking Stuff...')
+                    print("Power Checking Stuff...")
+
+                elif "sshCheck" == MESSAGE:
+
+                    print("Checking SSH into phone...")
+                    if check_ssh(CLIENT, CLIENT_PORT)==True:
+                        print("RPi can ssh into phone")
+                        conn.sendall(b'NOTIFICATION: RPi can ssh into phone\n')
+                    else:
+                        print("RPi cannot ssh into phone")
+                        conn.sendall(b'NOTIFICATION: RPi cannot ssh into phone\n')
+
+                elif "checkConnection" == MESSAGE:
+                    print("Checking Connection")
+
+                elif "testMessage" == MESSAGE:
+                    conn.sendall(b'NOTIFICATION: Sample Message Received...\n')
+                    print("Testing Message Stuff...")
+
+                elif "checkCamera" == MESSAGE:
+                    print("Checking Camera Stuff")
+                    #this checks whether the camera is supported and detected
+                    cameraConnCheck = subprocess.check_output("vcgencmd get_camera", shell=True);
+                    expected_output = u'supported=1 detected=1\n'
+                    actual_output = cameraConnCheck.decode()
+                    print("Expected: "+ expected_output)
+                    print("Actual: " + actual_output)
+                    if(cameraConnCheck.decode() in expected_output):
+                        print("camera is supported and detected")
+                        conn.sendall(b'NOTIFICATION: Camera is supported and detected\n')
+                    else:
+                        print("camera is not supported and detected")
+                        conn.sendall(b'NOTIFICATION: Camera is not supported and detected\n')
+                
                 #NEEDS TO BE IMPROVED to start slaves (services) as well through SSH using Paramiko library : http://docs.paramiko.org/en/stable/api/client.html
                 elif ("startMaster" == MESSAGE): #if message is start master, start the CT program
                     print("Starting Master...")
