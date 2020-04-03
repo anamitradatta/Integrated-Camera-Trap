@@ -100,7 +100,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                 elif ("deletePhotos" == MESSAGE):
                     print("Deleting photos")
                     conn.sendall(b'NOTIFICATION: Deleting photos from Master\n')
-                    delPhotosCmd = 'sudo rm -r /home/pi/cameraTrapPhotos/*')
+                    delPhotosCmd = 'sudo rm -r /home/pi/cameraTrapPhotos/*'
                     os.system(delPhotosCmd)
                     
                 #RENAME MOVEPICTURES TO DOWNLOADPICTURES
