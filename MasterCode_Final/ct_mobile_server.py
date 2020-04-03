@@ -85,7 +85,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                         conn.sendall(b'NOTIFICATION: Camera is not supported and detected\n')
                 
                 #NEEDS TO BE IMPROVED to start slaves (services) as well through SSH using Paramiko library : http://docs.paramiko.org/en/stable/api/client.html
-                elif ("startMaster" == MESSAGE): #if message is start master, start the CT program
+                #RENAME STARTMASTER TO STARTSYSTEM
+                elif ("startSystem" == MESSAGE): #if message is start master, start the CT program
                     print("Starting Master...")
                     conn.sendall(b'NOTIFICATION: Starting Master...\n') #send notification to phone to start master
                     #start master program in background
@@ -93,8 +94,17 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                     cmdStartMaster = "python -u /home/pi/ct_publish_master.py > /home/pi/ct_output.txt 2>/home/pi/ct_error.txt </dev/null &" 
                     
                     os.system(cmdStartMaster) #start master CT program
-
-                elif "movePictures" == MESSAGE: #if message is move pictures, FTP pictures to phone
+                
+                #NEEDS TO BE IMPROVED to delete photos from all slave devices as well
+                #ADD BUTTON FOR THIS
+                elif ("deletePhotos" == MESSAGE):
+                    print("Deleting photos")
+                    conn.sendall(b'NOTIFICATION: Deleting photos from Master\n')
+                    delPhotosCmd = 'sudo rm -r /home/pi/cameraTrapPhotos/*')
+                    os.system(delPhotosCmd)
+                    
+                #RENAME MOVEPICTURES TO DOWNLOADPICTURES
+                elif "downloadPictures" == MESSAGE: #if message is move pictures, FTP pictures to phone
                     #MAKE SURE FTP CLIENT IS RUNNING ON THE PHONE
                     ftp = FTP()
                     ftp.connect(CLIENT,CLIENT_PORT) #connect to FTP server on phone
