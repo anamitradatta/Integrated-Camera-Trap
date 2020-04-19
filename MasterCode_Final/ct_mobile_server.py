@@ -49,7 +49,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
         s.listen() #listen for incoming connections
         conn, addr = s.accept() #when it gets a connection (from the phone), it will accept it
         with conn:
-            CLIENT = addr[0] #Client IP address
+            CLIENT = addr[0] #set Client IP address
             print('Connected by', CLIENT)
             while True:
                 data = conn.recv(1024) # message from phone
