@@ -33,6 +33,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
 
                 MESSAGE = data.decode().strip();
                 
+                #You must put NOTIFICATION before send a message to the phone in order for the phone to print the message on the app
+                #see examples below 
+                
                 #Test Sending Picture
                 if "picture" == MESSAGE:
                     print("Sending Picture...")
@@ -84,27 +87,34 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                         print("camera is not supported and detected")
                         conn.sendall(b'NOTIFICATION: Camera is not supported and detected\n')
                 
-                #NEEDS TO BE IMPROVED to start slaves (services) as well through SSH using Paramiko library : http://docs.paramiko.org/en/stable/api/client.html
+                #SSH Paramiko library: http://docs.paramiko.org/en/stable/api/client.html
+                
+                #NEEDS TO BE IMPROVED to start slaves (via services) as well through SSH using Paramiko library
                 #RENAME STARTMASTER TO STARTSYSTEM
-                elif ("startSystem" == MESSAGE): #if message is start master, start the CT program
-                    print("Starting Master...")
-                    conn.sendall(b'NOTIFICATION: Starting Master...\n') #send notification to phone to start master
+                elif ("startSystem" == MESSAGE or "startMaster"==MESSAGE): #if message is start master, start the CT program
+                    print("Starting System...")
+                    conn.sendall(b'NOTIFICATION: Starting system...\n') #send notification to phone that system has started
                     #start master program in background
                     #THIS SHOULD BE CHANGED TO A SERVICE
                     cmdStartMaster = "python -u /home/pi/ct_publish_master.py > /home/pi/ct_output.txt 2>/home/pi/ct_error.txt </dev/null &" 
-                    
                     os.system(cmdStartMaster) #start master CT program
                 
-                #NEEDS TO BE IMPROVED to delete photos from all slave devices as well
+                #NEEDS TO BE IMPLEMENTED to stop master CT program and also CT slave programs through Paramiko SSH
+                #This should stop the CT Program Service on Master and slave devices
+                elif("stopSystem" == MESSAGE or "stopMaster"==MESSAGE):
+                    print("stopping System...")
+                    conn.sendall(b'NOTIFICATION: Stopping System...\n') #send notification to phone that system has stopped
+                
+                #NEEDS TO BE IMPROVED to delete photos from all slave devices as well through SSH Paramiko
                 #ADD BUTTON FOR THIS
                 elif ("deletePhotos" == MESSAGE):
-                    print("Deleting photos")
+                    print("Deleting photos...")
                     conn.sendall(b'NOTIFICATION: Deleting photos from Master\n')
                     delPhotosCmd = 'sudo rm -r /home/pi/cameraTrapPhotos/*'
                     os.system(delPhotosCmd)
                     
                 #RENAME MOVEPICTURES TO DOWNLOADPICTURES
-                elif "downloadPictures" == MESSAGE: #if message is move pictures, FTP pictures to phone
+                elif ("downloadPictures" == MESSAGE or "movePictures"==MESSAGE): #if message is move pictures, FTP pictures to phone
                     #MAKE SURE FTP CLIENT IS RUNNING ON THE PHONE
                     ftp = FTP()
                     ftp.connect(CLIENT,CLIENT_PORT) #connect to FTP server on phone
