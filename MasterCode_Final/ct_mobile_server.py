@@ -17,6 +17,17 @@ from ftplib import FTP
 #FTP Server App:
 #https://play.google.com/store/apps/details?id=com.medhaapps.wififtpserver&hl=en_US
 
+def check_ftp(server_ip, port):
+    try:
+        test_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        test_socket.connect((server_ip, port))
+    except Exception, ex:
+        # not up, log reason from ex if wanted
+        return False
+    else:
+        test_socket.close()
+    return True
+
 HOST = '192.168.5.101' #IP Address of the Master Pi
 PORT = 8888 # Port to listen on (non-privileged ports are > 1023)
 
@@ -39,10 +50,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
             print('Connected by', CLIENT)
             while True:
                 data = conn.recv(1024) # message from phone
-                if not data:
+                if not data: #if no data is received, then break the connection
                     break
 
-                MESSAGE = data.decode().strip();
+                MESSAGE = data.decode().strip(); #decode the message
                 
                 #You must put NOTIFICATION before send a message to the phone in order for the phone to print the message on the app
                 #see examples below 
@@ -50,7 +61,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                 #Test Sending Picture
                 if "picture" == MESSAGE:
                     print("Sending Picture...")
-                    conn.sendall(b'NOTIFICATION: Sending Picture...\n')
+                    conn.sendall(b'NOTIFICATION: Sending Picture...\n') #send notification to phone that picture is being sent
                     ftp = FTP()
                     ftp.connect(CLIENT,CLIENT_PORT) #connect to FTP server on phone
                     ftp.login('android','android') #username and password for FTP Client, change if needed
@@ -61,20 +72,21 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                     ftp.quit()
                     print ("Picture Sent to Phone")
                     conn.sendall(b'NOTIFICATION: Picture Sent to Phone\n')
-
+                    
                 elif "powerCheck" == MESSAGE:
                     conn.sendall(b'NOTIFICATION: Power Checking Stuff...')
                     print("Power Checking Stuff...")
-
-                elif "sshCheck" == MESSAGE:
-
-                    print("Checking SSH into phone...")
-                    if check_ssh(CLIENT, CLIENT_PORT)==True:
-                        print("RPi can ssh into phone")
-                        conn.sendall(b'NOTIFICATION: RPi can ssh into phone\n')
+                    
+                #rename to ftpCheck
+                #Check if FTP port is open
+                elif ("sshCheck" == MESSAGE or "ftpCheck"==MESSAGE):
+                    print("Checking FTP into phone...")
+                    if check_ftp(CLIENT, CLIENT_PORT)==True:
+                        print("RPi can ftp into phone")
+                        conn.sendall(b'NOTIFICATION: RPi can ftp into phone\n')
                     else:
                         print("RPi cannot ssh into phone")
-                        conn.sendall(b'NOTIFICATION: RPi cannot ssh into phone\n')
+                        conn.sendall(b'NOTIFICATION: RPi cannot ftp into phone\n')
 
                 elif "checkConnection" == MESSAGE:
                     print("Checking Connection")
