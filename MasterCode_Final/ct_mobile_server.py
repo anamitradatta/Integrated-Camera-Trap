@@ -6,7 +6,13 @@ import subprocess
 from time import sleep
 from ftplib import FTP
 
-#Run this app on the mobile phone. Make sure you configure the correct port, password, and username for the FTP server
+#Mobile App server code. Download the mobile app code from the ITC github page and install it on your android phone. 
+#This app listens to messages sent by the Camera Trap app and performs commands, outputs text, and sends notifications to the phone's app
+#Commands: download Photos, start the system, stop the system, etc.
+#Install this code on the master Pi only
+#First run this mobile server code, then run the app. Connect to the IP address of the master Pi and the port number (default: 8888)
+
+#Run an FTP server app on the mobile phone. Make sure you configure the correct port, password, and username for the FTP server
 #Also make sure you are connected to the correct network
 #FTP Server App:
 #https://play.google.com/store/apps/details?id=com.medhaapps.wififtpserver&hl=en_US
