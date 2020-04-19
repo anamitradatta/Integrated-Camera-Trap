@@ -86,7 +86,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                         print("RPi can ftp into phone")
                         conn.sendall(b'NOTIFICATION: RPi can ftp into phone\n')
                     else:
-                        print("RPi cannot ssh into phone")
+                        print("RPi cannot ftp into phone")
                         conn.sendall(b'NOTIFICATION: RPi cannot ftp into phone\n')
 
                 #Test stubs
