@@ -62,16 +62,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                 if "picture" == MESSAGE:
                     print("Sending Picture...")
                     conn.sendall(b'NOTIFICATION: Sending Picture...\n') #send notification to phone that picture is being sent
-                    ftp = FTP()
+                    ftp = FTP() #open FTP server
                     ftp.connect(CLIENT,CLIENT_PORT) #connect to FTP server on phone
                     ftp.login('android','android') #username and password for FTP Client, change if needed
-                    ftp.cwd('Download')
-                    file = open('/home/pi/test_photo.jpg','rb')
-                    ftp.storbinary('STOR ' + '/Download/test_photo.jpg', file)
-                    file.close()
-                    ftp.quit()
+                    ftp.cwd('Download') #change to SDCard directory
+                    file = open('/home/pi/test_photo.jpg','rb') #open the test photo file
+                    ftp.storbinary('STOR ' + '/Download/test_photo.jpg', file) #Store the image in the FTP server
+                    file.close() #close the FTP server
+                    ftp.quit() #quit the FTP server
                     print ("Picture Sent to Phone")
-                    conn.sendall(b'NOTIFICATION: Picture Sent to Phone\n')
+                    conn.sendall(b'NOTIFICATION: Picture Sent to Phone\n') #send notification to phone that photo has been sent
                     
                 #Was used for power checking from SDP20, now not needed, can be removed
                 elif "powerCheck" == MESSAGE:
@@ -89,7 +89,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                         print("RPi cannot ftp into phone")
                         conn.sendall(b'NOTIFICATION: RPi cannot ftp into phone\n')
 
-                #Test stubs
+                #Test stubs, can be removed, were used for debugging and testing
                 elif "checkConnection" == MESSAGE:
                     print("Checking Connection")
 
@@ -97,15 +97,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                     conn.sendall(b'NOTIFICATION: Sample Message Received...\n')
                     print("Testing Message...")
 
+                #Checks if camera is connected to the Pi correctly
                 elif "checkCamera" == MESSAGE:
                     print("Checking Camera...")
-                    #this checks whether the camera is supported and detected
+                    #this command checks whether the camera is supported and detected
                     cameraConnCheck = subprocess.check_output("vcgencmd get_camera", shell=True);
-                    expected_output = u'supported=1 detected=1\n'
+                    expected_output = u'supported=1 detected=1\n' #this should be the output if camera is supported and detected
                     actual_output = cameraConnCheck.decode()
-                    print("Expected: "+ expected_output)
-                    print("Actual: " + actual_output)
-                    if(cameraConnCheck.decode() in expected_output):
+                    #print("Expected: "+ expected_output)
+                    #print("Actual: " + actual_output)
+                    if(cameraConnCheck.decode() in expected_output): #if the output is correct, camera is connected
                         print("camera is supported and detected")
                         conn.sendall(b'NOTIFICATION: Camera is supported and detected\n')
                     else:
@@ -116,6 +117,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                 
                 #NEEDS TO BE IMPROVED to start slaves (via services) as well through SSH using Paramiko library
                 #RENAME STARTMASTER TO STARTSYSTEM
+                #can choose to use one sensor program or multiple sensor program
                 elif ("startSystem" == MESSAGE or "startMaster"==MESSAGE): #if message is start master, start the CT program
                     print("Starting System...")
                     conn.sendall(b'NOTIFICATION: Starting system...\n') #send notification to phone that system has started
@@ -123,20 +125,25 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                     #THIS SHOULD BE CHANGED TO A SERVICE
                     cmdStartMaster = "python -u /home/pi/ct_publish_master.py > /home/pi/ct_output.txt 2>/home/pi/ct_error.txt </dev/null &" 
                     os.system(cmdStartMaster) #start master CT program
+                    #now we need to start program on all slave Pis through ssh and perform ssh command for starting service
                 
                 #NEEDS TO BE IMPLEMENTED to stop master CT program and also CT slave programs through Paramiko SSH
                 #This should stop the CT Program Service on Master and slave devices
                 elif("stopSystem" == MESSAGE or "stopMaster"==MESSAGE):
                     print("stopping System...")
                     conn.sendall(b'NOTIFICATION: Stopping System...\n') #send notification to phone that system has stopped
+                    #need to stop program on master Pi possibly using service command by getting PID and using killing process command
+                    #need to stop program on slave pis by ssh and running ssh command to stopping service
                 
+                #delete photos from master and slave devices
                 #NEEDS TO BE IMPROVED to delete photos from all slave devices as well through SSH Paramiko
-                #ADD BUTTON FOR THIS
+                #ADD BUTTON FOR THIS in mobile app code
                 elif ("deletePhotos" == MESSAGE):
                     print("Deleting photos...")
                     conn.sendall(b'NOTIFICATION: Deleting photos from Master\n')
                     delPhotosCmd = 'sudo rm -r /home/pi/cameraTrapPhotos/*'
                     os.system(delPhotosCmd)
+                    #SSH into all slave Pis and run command to delete photos from their own CameraTrapPhotos directories
                     
                 #RENAME MOVEPICTURES TO DOWNLOADPICTURES
                 elif ("downloadPictures" == MESSAGE or "movePictures"==MESSAGE): #if message is move pictures, FTP pictures to phone
