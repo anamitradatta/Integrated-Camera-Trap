@@ -73,6 +73,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                     print ("Picture Sent to Phone")
                     conn.sendall(b'NOTIFICATION: Picture Sent to Phone\n')
                     
+                #Was used for power checking from SDP20, now not needed, can be removed
                 elif "powerCheck" == MESSAGE:
                     conn.sendall(b'NOTIFICATION: Power Checking Stuff...')
                     print("Power Checking Stuff...")
@@ -88,15 +89,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                         print("RPi cannot ssh into phone")
                         conn.sendall(b'NOTIFICATION: RPi cannot ftp into phone\n')
 
+                #Test stubs
                 elif "checkConnection" == MESSAGE:
                     print("Checking Connection")
 
                 elif "testMessage" == MESSAGE:
                     conn.sendall(b'NOTIFICATION: Sample Message Received...\n')
-                    print("Testing Message Stuff...")
+                    print("Testing Message...")
 
                 elif "checkCamera" == MESSAGE:
-                    print("Checking Camera Stuff")
+                    print("Checking Camera...")
                     #this checks whether the camera is supported and detected
                     cameraConnCheck = subprocess.check_output("vcgencmd get_camera", shell=True);
                     expected_output = u'supported=1 detected=1\n'
