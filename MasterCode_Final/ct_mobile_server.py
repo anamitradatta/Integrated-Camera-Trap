@@ -6,13 +6,18 @@ import subprocess
 from time import sleep
 from ftplib import FTP
 
+#Run this app on the mobile phone. Make sure you configure the correct port, password, and username for the FTP server
+#Also make sure you are connected to the correct network
+#FTP Server App:
+#https://play.google.com/store/apps/details?id=com.medhaapps.wififtpserver&hl=en_US
+
 HOST = '192.168.5.101' #IP Address of the Master Pi
 PORT = 8888 # Port to listen on (non-privileged ports are > 1023)
 
 CLIENT = ' ' #Client IP address for phone, will detect this automatically, no need to fill in
 #MAKE SURE PHONE IS CONNECTED TO CORRECT WIFI NETWORK
 CLIENT_PORT = 2221 #Client port for FTP server on phone
-#MAKE SURE FTP CLIENT IS RUNNING ON PHONE AND USES THE SAME PORT
+#MAKE SURE FTP SERVER IS RUNNING ON PHONE AND USES THE SAME PORT
 
 print ('Starting up mobile server')
 path = "/home/pi/cameraTrapPhotos/" #directory for photos
