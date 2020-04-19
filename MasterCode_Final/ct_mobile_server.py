@@ -147,7 +147,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                     
                 #RENAME MOVEPICTURES TO DOWNLOADPICTURES
                 elif ("downloadPictures" == MESSAGE or "movePictures"==MESSAGE): #if message is move pictures, FTP pictures to phone
-                    #MAKE SURE FTP CLIENT IS RUNNING ON THE PHONE
+                    #MAKE SURE FTP SERVER APP IS RUNNING ON THE PHONE
                     ftp = FTP()
                     ftp.connect(CLIENT,CLIENT_PORT) #connect to FTP server on phone
                     ftp.login('android','android') #username and password for FTP Client, change if needed
