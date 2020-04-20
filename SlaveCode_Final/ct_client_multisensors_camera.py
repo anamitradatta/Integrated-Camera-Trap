@@ -23,6 +23,7 @@ MQTT_PATH = "test" #mqtt topic for CT program
 pir=MotionSensor(4) #use motion sensor
 camera = PiCamera() #use camera
 path = '/home/pi/Desktop/cameraTrapPhotos/' #directory to store photos on
+cameraNum = 2 #device number, needs to be different for each pi
 
 #method to subscribe to MQTT topic
 def on_connect(client, userdata, flags, rc):
@@ -66,16 +67,16 @@ def on_message(client, userdata, msg):
 			print("sucessfully created the directory %s" % path)
             
         #set up camera and file parameters
-		photoName = 'set' + str(photoNum) + '_camera2.jpg'
+		photoName = 'set' + str(photoNum) + '_camera' + str(cameraNum) + '.jpg'
 		camera.resolution = (3240,2464)
 		camera.shutter_speed = 30000
         
         #take photo
 		camera.capture(path + photoName)
-		print("Photo Number " +  str(photoNum) +  " taken on Slave 2")
+		print("Photo Number " +  str(photoNum) +  " taken on Slave " + str(cameraNum))
 
 		#FTP to master pi
-		print("Moving from Cam2 to Master")
+		print("Moving from Cam"+ str(cameraNum) + " to Master")
 		ftp = FTP(MQTT_SERVER)
 		ftp.login('pi','raspberry')
 		pathMaster = '/home/pi/cameraTrapPhotos/set' + str(photoNum) + '/'
@@ -87,7 +88,7 @@ def on_message(client, userdata, msg):
 			print('couldnt open file')
             
 		ftp.storbinary('STOR ' + pathMaster + photoName, file)
-		print("Finished moving photo from Cam2 to master")
+		print("Finished moving photo from Cam " + str(cameraNum) +" to master")
 		file.close()
 		ftp.quit()
         print("closed FTP connection")
