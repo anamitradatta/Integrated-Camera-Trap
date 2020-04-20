@@ -22,7 +22,7 @@ path = '/home/pi/Desktop/cameraTrapPhotos/' #directory to store photos on
 
 #method to subscribe to MQTT topic
 def on_connect(client, userdata, flags, rc):
-
+	#result code 0 = success
 	print("Connected with result code "+str(rc))
 	print "Started multisensors photo synchronization program on slave 2"
     # Subscribing in on_connect() - if we lose the connection and
@@ -31,14 +31,15 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-
 	wordlist = (msg.payload).split()
+	
+	#send info about IP address and sensor reading
 	if(wordlist[0]=="Info"): #send sensor status to main pi for consensus
 		IPAddr = commands.getoutput("hostname -I") #ip addres of slave pi
 
         #set up socket connection with master pi to send sensor status
 		s = socket.socket()
-		port = 12345
+		port = 12345 #connect to master multisensor port 
 		s.connect((MQTT_SERVER,port))
         
 		if(pir.motion_detected==True):
@@ -60,7 +61,7 @@ def on_message(client, userdata, msg):
 		else:
 			print("sucessfully created the directory %s" % path)
             
-        #set up camera and file
+        #set up camera and file parameters
 		photoName = 'set' + str(photoNum) + '_camera2.jpg'
 		camera.resolution = (3240,2464)
 		camera.shutter_speed = 30000
@@ -92,13 +93,8 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect(MQTT_SERVER, 1883)
+client.connect(MQTT_SERVER, 1883) #connect to mqtt server on master pi at port 1883, designated for MQTT protocol
 
 # Process network traffic and dispatch callbacks. This will also handle
 # reconnecting.
 client.loop_forever()
-
-
-
-
-
