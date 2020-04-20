@@ -11,7 +11,7 @@ import shutil
 #When the sensor on the master Pi is activated, it will send a message to all slaves devices via MQTT to take a photo
 
 path = "/home/pi/cameraTrapPhotos/" #photos directory
-access_rights = 0o777
+access_rights = 0o777 #permissions for directory , 777 means everyone can read, write, and execute a file
 
 MQTT_SERVER = "localhost" #master Pi IP address
 MQTT_PATH = "test" #topic name for MQTT
