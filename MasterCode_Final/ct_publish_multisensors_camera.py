@@ -20,8 +20,8 @@ print("Started master multisensor photo sync program")
 MQTT_SERVER = "localhost" #master Pi IP address
 MQTT_PATH = "test" #topic name for MQTT
 path = '/home/pi/cameraTrapPhotos/'
-pir = MotionSensor(4) #activate motion sensor 
-camera = PiCamera() #activate camera
+pir = MotionSensor(4) #use motion sensor 
+camera = PiCamera() #use camera
 
 IPAddr = commands.getoutput("hostname -I") #get Pi's own IP address
 
