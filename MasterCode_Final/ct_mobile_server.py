@@ -71,10 +71,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s: #connect to WiFi co
                     ftp.connect(CLIENT,CLIENT_PORT) #connect to FTP server on phone
                     ftp.login('android','android') #username and password for FTP Client, change if needed
                     ftp.cwd('Download') #change to SDCard directory
-                    file = open('/home/pi/test_photo.jpg','rb') #open the test photo file
-                    ftp.storbinary('STOR ' + '/Download/test_photo.jpg', file) #Store the image in the FTP server
-                    file.close() #close the FTP server
-                    ftp.quit() #quit the FTP server
+                    file = open('/home/pi/test_photo.jpg','rb') 
+                    ftp.storbinary('STOR ' + '/Download/test_photo.jpg', file) 
+                    file.close() 
+                    ftp.quit() 
                     print ("Picture Sent to Phone")
                     conn.sendall(b'NOTIFICATION: Picture Sent to Phone\n') #send notification to phone that photo has been sent
                     
