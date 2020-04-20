@@ -9,6 +9,8 @@ import shutil
 import commands
 from gpiozero import MotionSensor
 
+#Author: Anamitra Datta
+
 MQTT_SERVER = "192.168.5.101" #IP adress of master pi
 MQTT_PATH = "test" #mqtt topic for CT program
 
