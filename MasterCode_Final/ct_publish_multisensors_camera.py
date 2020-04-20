@@ -13,6 +13,8 @@ import commands
 
 #Master Publisher code for multiple sensors photo triggering
 
+print("Started master multisensor photo sync program")
+
 MQTT_SERVER = "localhost" #master Pi IP address
 MQTT_PATH = "test" #topic name for MQTT
 path = '/home/pi/cameraTrapPhotos/'
@@ -22,18 +24,17 @@ camera = PiCamera() #activate camera
 IPAddr = commands.getoutput("hostname -I") #get Pi's own IP address
 
 threshold = 0.67 #threshold for taking photo, percent of sensors that need to be true to take a photo, configurable
-photoNum = 1
+photoNum = 1 #current set/photo number
+delay = 30 #amount of time in seconds to rest after a photo session (should be greater than 30 seconds)
 
 #set socket for listening to slave pis
 s = socket.socket()
-s.settimeout(10)
-s.bind(('',12345))
+s.settimeout(10) #set timeout for few seconds, enough to read sensor data from all slave Pis
+s.bind(('',12345)) #bind the socket to a unused undesignated port
 while True:
-
-	sensorlist = []
-	print("Started master multisensor photo sync program")
+	sensorlist = [] #list of all devices by their ip addresses and their sensor readings
 	print("Resting...")
-	sleep(10)
+	sleep(delay)
 	print("Starting")
 	message = "Info"
 	publish.single(MQTT_PATH,message,hostname=MQTT_SERVER) #send message get info about slave sensors 
@@ -43,8 +44,7 @@ while True:
 		sensorlist.append([str(IPAddr).rstrip(),str(True)])
 	else:
 		sensorlist.append([str(IPAddr).rstrip(),str(False)])
-
-	print("Socket bounded to port 12345")
+		
     #listen for incoming connections
 	s.listen(5)
 	print("Socket is listening")
@@ -55,10 +55,6 @@ while True:
 			c,addr = s.accept() #accept connections from slave pis
 			print('Got connection from', addr)
 			receivedInfo = str(c.recv(1024))
-            #print all sensors info
-			for x in sensorlist:
-				print(x)
-			print(receivedInfo)
             
             #parse data and add it to the sensor list
 			splitInfo = receivedInfo.split()
@@ -66,9 +62,11 @@ while True:
 			receivedSensor = splitInfo[1]
 			sensorlist.append([receivedIP,receivedSensor])
 			c.close()
+			
 		except socket.timeout:
 			break
-
+			
+	#list of all devices and their sensor readings
 	for x in sensorlist:
 		print(x)
         
@@ -82,13 +80,13 @@ while True:
 	ratio = numTrue/numSensors
 	print("ratio: " + str(ratio))
 
-    #if ratio is above the threshold, take a photo
+    #if ratio is above the threshold, start a photo session
 	if(ratio>threshold):
 		#Send MQTT message to slaves to take photo and start photo
 		message = "Take Synced Photo " + str(photoNum)
 		publish.single(MQTT_PATH,message,hostname=MQTT_SERVER)
 		ctpath = '/home/pi/cameraTrapPhotos/set' + str(photoNum) +  '/'
-		access_rights = 0o777
+		access_rights = 0o777 #permissions for directory
         #make directory for current photo session
 		try:
 			os.mkdir(ctpath,access_rights)
@@ -97,7 +95,7 @@ while True:
 		else:
 			print("successfully created the directory %s" % ctpath)
             
-        #set camera and file
+        #set camera and file parameters
 		filename = 'set'+str(photoNum)+'_camera1.jpg'
 		camera.resolution=(3280,2464)
 		camera.shutter_speed = 30000
@@ -107,5 +105,5 @@ while True:
 		#End of Photo session
 
 		print("Camera 1 photo number "+ str(photoNum) + " taken")
+		#go to next photo session
 		photoNum = photoNum + 1
-
