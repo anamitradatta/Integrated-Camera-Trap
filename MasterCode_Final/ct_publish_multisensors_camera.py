@@ -9,7 +9,9 @@ import os
 import shutil
 import commands
 
-#Author: Anamitra Datta
+#Authors: 
+#Anamitra Datta
+#Minting Chen
 
 #Master Publisher code for multiple sensors photo triggering
 
