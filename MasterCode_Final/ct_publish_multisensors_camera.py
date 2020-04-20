@@ -9,6 +9,8 @@ import os
 import shutil
 import commands
 
+#Author: Anamitra Datta
+
 MQTT_SERVER = "localhost" #master Pi IP address
 MQTT_PATH = "test" #topic name for MQTT
 path = '/home/pi/cameraTrapPhotos/'
