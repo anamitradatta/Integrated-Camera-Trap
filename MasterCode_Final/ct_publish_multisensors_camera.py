@@ -11,6 +11,8 @@ import commands
 
 #Author: Anamitra Datta
 
+#Master Publisher code for multiple sensors photo triggering
+
 MQTT_SERVER = "localhost" #master Pi IP address
 MQTT_PATH = "test" #topic name for MQTT
 path = '/home/pi/cameraTrapPhotos/'
