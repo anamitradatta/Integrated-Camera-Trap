@@ -21,7 +21,7 @@ camera = PiCamera() #activate camera
 
 IPAddr = commands.getoutput("hostname -I") #get Pi's own IP address
 
-threshold = 0.67 #threshold for taking photo, configure for your needs
+threshold = 0.67 #threshold for taking photo, percent of sensors that need to be true to take a photo, configurable
 photoNum = 1
 
 #set socket for listening to slave pis
