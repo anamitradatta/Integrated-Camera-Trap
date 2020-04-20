@@ -8,10 +8,14 @@ import os
 import shutil
 import sys
 
+#Author: Anamitra Datta
+
+#slave client code for single sensor photo triggering
+
 MQTT_SERVER = "192.168.5.101" #IP address of main pi
 MQTT_PATH = "test" #mqtt topic for CT program
 path = '/home/pi/cameraTrapPhotos/' #directory for photos
-camera = PiCamera() #activate the camera
+camera = PiCamera() #use the camera
 
 #method to subscribe to MQTT topic
 def on_connect(client, userdata, flags, rc):
@@ -24,11 +28,12 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     word_list = (msg.payload).split()
-    if word_list[0] == "Take": #take photo and send it to main pi
+    #if master pi asks to take a photo, take a photo and ftp it to main pi
+    if word_list[0] == "Take": 
         print("Received message: " + str(msg.payload))
-        photoNum = int(word_list[-1])
+        photoNum = int(word_list[-1]) #get current photo session number
         path = '/home/pi/cameraTrapPhotos/set' + str(photoNum) + '/'
-        access_rights = 0o777
+        access_rights = 0o777 #permissions for directory
         
         #make directory for current photo session
         try:
@@ -38,7 +43,7 @@ def on_message(client, userdata, msg):
         else:
             print("sucessfully created the directory %s" % path)
             
-        #set up camera and file
+        #set up camera and file parameters
         photoName = 'set' + str(photoNum) + '_camera2.jpg'
         camera.resolution = (3240,2464)
         camera.shutter_speed = 30000
@@ -63,12 +68,13 @@ def on_message(client, userdata, msg):
         file.close()
         ftp.quit()
         print("closed ftp connection")
+        
 # Create an MQTT client and attach our routines to it.
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect(MQTT_SERVER, 1883)
+client.connect(MQTT_SERVER, 1883) #connect to mqtt server on master pi, use port 1883, port for MQTT
 
 # Process network traffic and dispatch callbacks. This will also handle
 # reconnecting.
