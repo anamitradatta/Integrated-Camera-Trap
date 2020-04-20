@@ -20,11 +20,11 @@ iplist=($(cat ip.txt | grep Host: | awk -v h=$iphost 'NR> 1 {if ($2!=h) print $2
 ssh-keygen -b 2048 -t rsa -f /home/pi/.ssh/id_rsa -q -N "" 0>&-
 
 #Copy the SSH key into every Pi. NEEDS TO BE IMPROVED
-#for i in "${iplist[@]}"
-#do
-	#sudo sshpass -p "raspberry" ssh-copy-id -i ~/.ssh/id_rsa pi@$i
-	#ssh-copy-id -i ~/.ssh/id_rsa pi@$i
-#done
+for i in "${iplist[@]}"
+do
+	sudo sshpass -p "raspberry" ssh-copy-id -i ~/.ssh/id_rsa pi@$i
+	ssh-copy-id -i ~/.ssh/id_rsa pi@$i
+done
 
 #Set the time in each Raspberry Pi from the RTC through ssh
 for i in "${iplist[@]}"
