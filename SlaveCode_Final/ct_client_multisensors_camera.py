@@ -13,6 +13,10 @@ from gpiozero import MotionSensor
 #Anamitra Datta
 #Minting Chen
 
+#Slave client code for multiple sensor photo triggering
+#If message "Info" is received from master pi, send data about the sensor to master Pi
+#if message "Take" is received from master pi, take a photo and ftp it to master pi
+
 MQTT_SERVER = "192.168.5.101" #IP adress of master pi
 MQTT_PATH = "test" #mqtt topic for CT program
 
@@ -22,7 +26,7 @@ path = '/home/pi/Desktop/cameraTrapPhotos/' #directory to store photos on
 
 #method to subscribe to MQTT topic
 def on_connect(client, userdata, flags, rc):
-	#result code 0 = success
+	#result code 0 = successful
 	print("Connected with result code "+str(rc))
 	print "Started multisensors photo synchronization program on slave 2"
     # Subscribing in on_connect() - if we lose the connection and
