@@ -31,6 +31,8 @@ delay = 30 #amount of time in seconds to rest after a photo session (should be g
 s = socket.socket()
 s.settimeout(10) #set timeout for few seconds, enough to read sensor data from all slave Pis
 s.bind(('',12345)) #bind the socket to a unused undesignated port
+
+#run continously until terminated by user
 while True:
 	sensorlist = [] #list of all devices by their ip addresses and their sensor readings
 	print("Resting...")
