@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#Author: Anamitra Datta
+
 #Script to SSH into every Pi in the network from the Access point Raspberry Pi attached with an RTC and set the time on each Pi
 #to the time on the AP pi's RTC
 
