@@ -10,7 +10,9 @@ import sys
 
 #Author: Anamitra Datta
 
-#slave client code for single sensor photo triggering
+#slave client code for single sensor photo triggering. 
+#When this device gets a message from the master Pi to take a photo
+#take a photo and ftp it to the main pi
 
 MQTT_SERVER = "192.168.5.101" #IP address of main pi
 MQTT_PATH = "test" #mqtt topic for CT program
@@ -19,6 +21,7 @@ camera = PiCamera() #use the camera
 
 #method to subscribe to MQTT topic
 def on_connect(client, userdata, flags, rc):
+    #result code 0 = successful
     print("Connected with result code "+str(rc))
     print("Started the photo synchronization program on slave 2. Waiting for a signal from the master module")
     # Subscribing in on_connect() - if we lose the connection and
