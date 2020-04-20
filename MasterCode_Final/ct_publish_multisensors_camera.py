@@ -14,6 +14,9 @@ import commands
 #Minting Chen
 
 #Master Publisher code for multiple sensors photo triggering
+#Continously and periodically polls all devices in the network to knwo about their sensor values
+#If a certain percentage of sensors are true in the network, then motion is detected
+#Then, start the photo session process by sending a message to all slave devices to take a photo
 
 print("Started master multisensor photo sync program")
 
