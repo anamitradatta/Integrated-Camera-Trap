@@ -5,22 +5,30 @@ from gpiozero import MotionSensor
 import os
 import shutil
 
+#Author: Anamitra Datta
+
+#Master Publisher Code for single sensor Photo triggering. 
+#When the sensor on the master Pi is activated, it will send a message to all slaves devices via MQTT to take a photo
+
 path = "/home/pi/cameraTrapPhotos/" #photos directory
 access_rights = 0o777
 
 MQTT_SERVER = "localhost" #master Pi IP address
 MQTT_PATH = "test" #topic name for MQTT
 
-camera = PiCamera() #activate camera
-pir = MotionSensor(4) #activate motion sensor
-photoNum = 1
+camera = PiCamera() #use camera
+pir = MotionSensor(4) #use motion sensor
+photoNum = 1 #current Photo (set) number
+delay = 30 #amount of time in seconds to rest after a photo session (should be greater than 30 seconds)
 
+#runs continously until termination by user
 while True:
+	#Rests for a few seconds to FTP all photos from slave devices and to prevent multiple photos to be taken in a small time frame
 	print("Photo synchroniztion program: master device running")
 	print("Resting the program for a few seconds...")
-	sleep(30)
+	sleep(delay)
 	print("Done resting")
-	message = "Motion Not Detected"
+	message = "Motion Not Detected" #initalizing message to send via MQTT
 	startdetection = False
     
     #Wait until motion is detected to start photo session
@@ -31,6 +39,7 @@ while True:
 		print(pir.motion_detected)
 		if startdetection== True:
 			if pir.motion_detected == True:
+				#motion detected, change message to "take photo", send to all slave devices, attach current set number
 				message = "Take Synced Photo " + str(photoNum)
 				break;
 
@@ -39,7 +48,7 @@ while True:
 	#MQTT, send message to all slaves in network to take a photo
 	publish.single(MQTT_PATH, message, hostname=MQTT_SERVER)
 
-	path = '/home/pi/cameraTrapPhotos/set' + str(photoNum) +  '/'
+	path = '/home/pi/cameraTrapPhotos/set' + str(photoNum) +  '/' #path for photo
 
     #make a directory for the current session to store photos in 
 	try:
@@ -49,7 +58,7 @@ while True:
 	else:
 		print("successfully created the directory %s" % path)
 
-    #set up photo and camera
+    #set up photo and camera settings
 	filename = 'set'+str(photoNum)+'_camera1.jpg'
 	camera.resolution=(3280,2464)
 	camera.shutter_speed = 30000
@@ -59,5 +68,6 @@ while True:
     
 	#End of Photo session
 	print("Camera 1 photo number "+ str(photoNum) + " taken")
+	
+	#go to next photo session
 	photoNum = photoNum + 1
-
