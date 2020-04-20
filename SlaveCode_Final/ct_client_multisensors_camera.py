@@ -9,13 +9,15 @@ import shutil
 import commands
 from gpiozero import MotionSensor
 
-#Author: Anamitra Datta
+#Authors: 
+#Anamitra Datta
+#Minting Chen
 
 MQTT_SERVER = "192.168.5.101" #IP adress of master pi
 MQTT_PATH = "test" #mqtt topic for CT program
 
-pir=MotionSensor(4) #activate motion sensor
-camera = PiCamera() #activate camera
+pir=MotionSensor(4) #use motion sensor
+camera = PiCamera() #use camera
 path = '/home/pi/Desktop/cameraTrapPhotos/' #directory to store photos on
 
 #method to subscribe to MQTT topic
