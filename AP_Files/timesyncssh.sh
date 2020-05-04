@@ -5,6 +5,8 @@
 #Script to SSH into every Pi in the network from the Access point Raspberry Pi attached with an RTC and set the time on each Pi
 #to the time on the AP pi's RTC
 
+#INCOMPLETE
+
 #Get the list of all IP addresses in the current network
 nmap -sn -oG ip.txt 192.168.5.1-255 > /dev/null
 
