@@ -11,6 +11,8 @@ import paramiko
 #Anamitra Datta
 #Max Haimowitz 
 
+#mobile app source code written by Max Haimowitz
+
 #Mobile App server code. Download the mobile app code from the ITC github page and install it on your android phone. 
 #This app listens to messages sent by the Camera Trap app and performs commands, outputs text, and sends notifications to the phone's app
 #Commands: download Photos, start the system, stop the system, etc.
