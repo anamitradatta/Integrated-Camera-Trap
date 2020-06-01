@@ -16,7 +16,7 @@ access_rights = 0o777 #permissions for directory , 777 means everyone can read, 
 #create a directory if one does not exist for the camera trap photos
 if(os.path.isdir(path)==False):
 	os.mkdir(path,access_rights)
-#lse, remove all photos and photo sets currently in the directory
+#else, remove all photos and photo sets currently in the directory
 else:
 	for fname in os.listdir(path):
 		shutil.rmtree(path+fname)
