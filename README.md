@@ -1,5 +1,18 @@
 Integrated-Camera-Trap
 
+Senior Design Project 2020 Team 15
+
+Members:
+Anamitra Datta
+Max Haimowitz
+Xiaoyang Pan
+Minting Chen
+
+Advisors:
+Professor Duncan Irschick: (https://www.bio.umass.edu/biology/about/directories/faculty/duncan-j-irschick)
+Professor David Schmidt: (https://mie.umass.edu/faculty/david-schmidt)
+Professor Marco Duarte (ECE SDP Advisor) : (https://ece.umass.edu/faculty/marco-duarte)
+
 http://www.ecs.umass.edu/ece/sdp/sdp20/team15/
 
 Network of Raspberry Pis connected with Camera Modules to take synchronized pictures via WIFI using Message Query Telemetry Transport (MQTT) (Mosquitto) triggered by motion sensors
