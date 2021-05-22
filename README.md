@@ -2,8 +2,7 @@ Integrated-Camera-Trap
 
 Senior Design Project 2020 Team 15
 
-Members:
-
+Members: <br />
 Anamitra Datta  <br />
 Max Haimowitz <br />
 Xiaoyang Pan <br />
